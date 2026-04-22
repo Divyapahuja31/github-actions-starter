@@ -6,6 +6,9 @@ on:
 jobs:
   tests:
     runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+      node-version: [24.x, 19.x, 18.x]
     defaults:
       run:
         working-directory: backend
@@ -15,7 +18,7 @@ jobs:
       - name: Node setup
         uses: actions/setup-node@v4
         with:
-          node-version: 24.x
+          node-version: ${{ matrix.node-version }}
       - name: install dependencies
         run: npm ci
       - name: Run All tests
