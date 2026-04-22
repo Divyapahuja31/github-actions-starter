@@ -1,20 +1,25 @@
-name : Backend test
+name: Backend Test
 on:
-  push:
+   push:
       branches: [ main ]
-  pull_request:
+   pull_request:
 jobs:
   tests:
-      runs-on: ubuntu-22.04
-      defaults:
-        run:
-          working-directory: backend
-      steps:
-        - name: setup
-          uses: actions/checkout@v4
-        - name: Node setup
-          uses: actions/setup-node@v4
-          with:
-            node-version: 24.x
-        - name: install dependencies
-          run: npm ci
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        node-version: [24.x, 19.x, 18.x]
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: setup
+        uses: actions/checkout@v4
+      - name: Node setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: install dependencies
+        run: npm ci
+      - name: Run All tests
+        run: npm run test
